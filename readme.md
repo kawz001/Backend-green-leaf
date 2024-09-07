@@ -21,7 +21,7 @@ Este repositório contém o backend para o aplicativo de trilha. O backend é re
 1. Clone este repositório:
 
     ```bash
-    git clone https://github.com/seu-usuario/trail-app-backend.git
+    git clone https://github.com/kawz001/Backend-green-leaf.git
     cd trail-app-backend
     ```
 
