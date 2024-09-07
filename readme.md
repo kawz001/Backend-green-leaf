@@ -1,4 +1,4 @@
-# Trail App Backend
+# Green Leaf App Backend
 
 Este repositório contém o backend para o aplicativo de trilha. O backend é responsável por gerenciar a lógica do servidor, a API para comunicação com o frontend e a interação com o banco de dados.
 
