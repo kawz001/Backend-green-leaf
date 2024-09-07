@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: trail_app
+      POSTGRES_USER: seu_usuario
+      POSTGRES_PASSWORD: sua_senha
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: db
+      DB_USER: seu_usuario
+      DB_PASS: sua_senha
+      DB_NAME: trail_app
+    working_dir: /app/database
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      - db
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: db
+      DB_USER: seu_usuario
+      DB_PASS: sua_senha
+      DB_NAME: trail_app
+    working_dir: /app/backend
+    command: ["npm", "run", "dev"]
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
