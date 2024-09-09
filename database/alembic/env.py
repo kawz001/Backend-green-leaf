@@ -1,13 +1,20 @@
+import os
+import sys
 from logging.config import fileConfig
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-from alembic import context
-from database.db_config import Base  # Importa os modelos do banco de dados
-from database.models.trail import Trail  # Importa o modelo de exemplo
 
+from sqlalchemy import engine_from_config, pool
+from alembic import context
+
+# Adiciona o diretório raiz do projeto ao PYTHONPATH
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
+from database.db_config import Base  # Importa os modelos do banco de dados
+from database.models.trail import Trail  # Importa o modelo para garantir que ele esteja registrado
+
+# Configurações do Alembic
 config = context.config
 fileConfig(config.config_file_name)
-target_metadata = Base.metadata
+target_metadata = Base.metadata  # Define a metadata como Base.metadata para que o Alembic detecte as tabelas
 
 def run_migrations_offline():
     """Executa migrações em modo offline (somente DDL)."""
