@@ -3,10 +3,23 @@ from sqlalchemy.orm import relationship
 from database.db_config import Base
 from datetime import datetime
 
+from sqlalchemy import Column, Integer, String, Enum, ForeignKey, Float, DateTime
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
+from database.db_config import Base
+from datetime import datetime
+import uuid
+
 class User(Base):
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True, index=True)
+    # ID incremental (chave primária)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+
+    # UUID (chave única)
+    uuid = Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False, index=True)
+
+    # Outros campos da tabela de usuários
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
@@ -25,6 +38,7 @@ class User(Base):
     payments = relationship('Payment', back_populates='user', cascade="all, delete-orphan")
     friends = relationship('Friend', foreign_keys='Friend.user_id', back_populates='user', cascade="all, delete-orphan")
     added_friends = relationship('Friend', foreign_keys='Friend.friend_id', back_populates='friend', cascade="all, delete-orphan")
+
 
 class Trail(Base):
     __tablename__ = 'trails'
