@@ -19,10 +19,11 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      DB_HOST: db
-      DB_USER: green_leaf
-      DB_PASS: green_leaf
-      DB_NAME: trail_app
+      DB_HOST:aws-0-us-west-1.pooler.supabase.com
+      DB_PORT:6543
+      DB_NAME:postgres
+      DB_USER:postgres.ffoiyjfjqoeltfsfpzql
+      DB_PASSWORD:GreenLeaf@123@
     working_dir: /app/database
     depends_on:
       - db
