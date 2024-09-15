@@ -26,7 +26,7 @@ services:
     working_dir: /app/database
     depends_on:
       - db
-    command: ["sh", "-c", "alembic revision --autogenerate -m 'Auto migration' && alembic upgrade head"]
+    command: ["sh", "-c", "./wait-for-it.sh db && alembic revision --autogenerate -m 'Auto migration' && alembic upgrade head"]
 
 volumes:
   db_data:
