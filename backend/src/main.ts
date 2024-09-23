@@ -9,6 +9,16 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Green Leaf')
     .setDescription('Documentacao da Api do Green Leaf')
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+      name: 'Authorization',
+      description: 'Token JWT para autenticacao',
+      in: 'header'
+    },
+    'KEY_AUTH'
+  )
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);

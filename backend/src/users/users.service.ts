@@ -6,7 +6,6 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthenticateUserDto } from './dto/authenticate-user.dto';
 import * as bcrypt from 'bcrypt';
-import { ValidatedUser } from './dto/validated-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -26,8 +25,16 @@ export class UsersService {
     return this.repository.find();
   }
 
-  findOne(id: number) {
+  findOneById(id: number) {
     return this.repository.findOneBy({id});
+  }
+
+  findOneByEmail(email: string) {
+    return this.repository.findOneBy({email});
+  }
+
+  findOneToLogin(email: string, password: string) {
+    return this.repository.findOneBy({email, password});
   }
 
   async update(id: number, dto: UpdateUserDto) {
@@ -48,14 +55,7 @@ export class UsersService {
   }
 
   async authenticate(dto: AuthenticateUserDto) {
-    const user = await this.repository.findOneBy({email: dto.email});
-    if (!user) {
-      throw new Error('Invalid credentials');
-    } else if (!bcrypt.compare(user.password, dto.password)) {
-      throw new Error('Invalid credentials');
-    }
-    const validatedUser: ValidatedUser = new ValidatedUser(user);
-    return validatedUser;
+    
   }
 
   async hashPassword(password: string) {
