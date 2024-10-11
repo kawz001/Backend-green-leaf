@@ -7,6 +7,7 @@ import { config } from 'dotenv';
 import { AuthModule } from './auth/auth.module';
 import { TrailsModule } from './trails/trails.module';
 import { TrailRatingsModule } from './trail-ratings/trail-ratings.module';
+import { TrailCommentsModule } from './trail-comments/trail-comments.module';
 
 config();
 
@@ -25,7 +26,8 @@ config();
     UsersModule,
     AuthModule,
     TrailsModule,
-    TrailRatingsModule],
+    TrailRatingsModule,
+    TrailCommentsModule],
   controllers: [AppController],
   providers: [AppService],
 })

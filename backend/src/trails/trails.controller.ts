@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { TrailsService } from './trails.service';
 import { CreateTrailDto } from './dto/create-trail.dto';
 import { UpdateTrailDto } from './dto/update-trail.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { SearchTrailDto } from './dto/search-trail.dto';
 
 @ApiTags('Trails')
 @Controller('trails')
@@ -18,8 +19,18 @@ export class TrailsController {
   @ApiBearerAuth('KEY_AUTH')
   @ApiOperation({ summary: 'Retorna todas as trilhas ja cadastradas' })
   @Get()
-  findAll() {
-    return this.trailsService.findAll();
+  async findAll(@Query() dto: SearchTrailDto) {
+    const { data, count } = await this.trailsService.findAll(dto);
+        const currentPage = dto.page || 1;
+        const limit = dto.limit || 10;
+        const totalPages = Math.ceil(count / limit);
+
+        return {
+            data,
+            count,
+            currentPage,
+            totalPages,
+        };
   }
 
   @ApiBearerAuth('KEY_AUTH')

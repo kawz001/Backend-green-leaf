@@ -5,7 +5,6 @@ import Difficulty from '../entities/enum/difficulty';
 
 export class CreateTrailDto {
   @ApiProperty({
-        description: 'trail nam',
         example: 'Trilha do tatu',
       }
   )
@@ -13,7 +12,6 @@ export class CreateTrailDto {
   name: string;
 
   @ApiProperty({
-    description: 'trail distance',
     example: 1000,
   }
 )
@@ -21,7 +19,6 @@ export class CreateTrailDto {
   distance: number;
 
   @ApiProperty({
-    description: 'trail difficulty level',
     example: 'Fácil',
   }
 )
@@ -29,7 +26,6 @@ export class CreateTrailDto {
   difficulty: Difficulty;
 
   @ApiProperty({
-    description: 'trail desc',
     example: 'Trilha do tatu dsfdsafdsafdsafadsfas',
   }
 )
@@ -37,21 +33,18 @@ export class CreateTrailDto {
   description: string;
 
   @ApiProperty({
-    description: 'trail desc',
     example: 'Deserto do saara',
   })
   @IsString()
   location: string;
 
   @ApiProperty({
-    description: 'trail desc',
     example: 'rewqrdsfdsgqwegqwe',
   })
   @IsString()
   photo: string;
 
   @ApiProperty({
-    description: 'trail desc',
     example: 5,
   })
   @IsInt()

@@ -4,6 +4,7 @@ import { UpdateTrailDto } from './dto/update-trail.dto';
 import { Trail } from './entities/trail.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SearchTrailDto } from './dto/search-trail.dto';
 
 @Injectable()
 export class TrailsService {
@@ -16,8 +17,19 @@ export class TrailsService {
     return this.repository.save(trail);
   }
 
-  findAll() {
-    return this.repository.find();
+  async findAll(dto: SearchTrailDto) {
+    const { name, page = 1, limit = 10 } = dto;
+        const queryBuilder = this.repository.createQueryBuilder('trails');
+
+        if (name) {
+            queryBuilder.andWhere('trails.name LIKE :name', { name: `%${name}%` });
+        }
+
+        queryBuilder.skip((page - 1) * limit).take(limit);
+
+        const [data, count] = await queryBuilder.getManyAndCount();
+
+        return { data, count };
   }
 
   findOne(id: number) {
