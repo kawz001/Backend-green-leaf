@@ -17,8 +17,8 @@ export class AuthController {
     schema: {
       type: 'object',
       properties: {
-        email: { type:'string' },
-        password: { type:'string' }
+        email: { type:'string', example: 'joao@gmail.com' },
+        password: { type:'string', example: '123456' }
       },
       required: ['email', 'password']
     },
@@ -26,7 +26,7 @@ export class AuthController {
   })
   @ApiResponse({ status: 200, description: 'Successfully logged in.' })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
-  signIn(@Body() dto: LoginDto) {
-    return this.authService.signIn(dto)
+  async signIn(@Body() dto: LoginDto) {
+    return await this.authService.signIn(dto)
   }
 }

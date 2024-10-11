@@ -5,6 +5,8 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { config } from 'dotenv';
 import { AuthModule } from './auth/auth.module';
+import { TrailsModule } from './trails/trails.module';
+import { TrailRatingsModule } from './trail-ratings/trail-ratings.module';
 
 config();
 
@@ -21,7 +23,9 @@ config();
       synchronize: true,
     }),
     UsersModule,
-    AuthModule],
+    AuthModule,
+    TrailsModule,
+    TrailRatingsModule],
   controllers: [AppController],
   providers: [AppService],
 })

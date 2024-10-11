@@ -16,6 +16,6 @@ import { AuthGuard } from 'src/auth/auth.guard';
       useClass: AuthGuard
     }
   ],
-  exports:[UsersService]
+  exports:[UsersService, TypeOrmModule]
 })
 export class UsersModule {}
