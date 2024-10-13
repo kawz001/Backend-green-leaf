@@ -1,4 +1,4 @@
-import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne } from "typeorm";
+import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import Difficulty from "./enum/difficulty";
 import { User } from "src/users/entities/user.entity";
 
@@ -29,7 +29,8 @@ export class Trail {
     photo: string;
 
     @ManyToOne(() => User)
-    createdById: number;
+    @JoinColumn({ name: 'createdById' }) // Mapeia a coluna como chave estrangeira
+    createdBy: User; // Tipo alterado para User
 
     @CreateDateColumn({ type: 'timestamp' })
     createdAt: Date;

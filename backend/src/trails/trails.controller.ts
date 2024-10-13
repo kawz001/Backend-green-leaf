@@ -9,6 +9,7 @@ import { SearchTrailDto } from './dto/search-trail.dto';
 @Controller('trails')
 export class TrailsController {
   constructor(private readonly trailsService: TrailsService) {}
+
   @ApiBearerAuth('KEY_AUTH')
   @ApiOperation({ summary: 'Cria uma nova trilha' })
   @Post()
@@ -17,31 +18,31 @@ export class TrailsController {
   }
 
   @ApiBearerAuth('KEY_AUTH')
-  @ApiOperation({ summary: 'Retorna todas as trilhas ja cadastradas' })
+  @ApiOperation({ summary: 'Retorna todas as trilhas cadastradas' })
   @Get()
   async findAll(@Query() dto: SearchTrailDto) {
     const { data, count } = await this.trailsService.findAll(dto);
-        const currentPage = dto.page || 1;
-        const limit = dto.limit || 10;
-        const totalPages = Math.ceil(count / limit);
+    const currentPage = dto.page || 1;
+    const limit = dto.limit || 10;
+    const totalPages = Math.ceil(count / limit);
 
-        return {
-            data,
-            count,
-            currentPage,
-            totalPages,
-        };
+    return {
+      data,
+      count,
+      currentPage,
+      totalPages,
+    };
   }
 
   @ApiBearerAuth('KEY_AUTH')
-  @ApiOperation({ summary: 'Retorna uma trilha pelo id dela' })
+  @ApiOperation({ summary: 'Retorna uma trilha pelo ID' })
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.trailsService.findOne(+id);
   }
 
   @ApiBearerAuth('KEY_AUTH')
-  @ApiOperation({ summary: 'Faz alteracao na trilha desejada' })
+  @ApiOperation({ summary: 'Faz alteração na trilha desejada' })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTrailDto: UpdateTrailDto) {
     return this.trailsService.update(+id, updateTrailDto);
