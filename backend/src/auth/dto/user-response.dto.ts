@@ -1,4 +1,7 @@
+import { IntegerType } from "typeorm";
+
 export class UserResponseDto {
+    id: IntegerType;
     name: string;
     email: string;
     profilePicture: string;
