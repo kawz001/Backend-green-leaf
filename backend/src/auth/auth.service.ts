@@ -12,7 +12,6 @@ export class AuthService {
     private readonly jwtService: JwtService
   ){}
   async signIn(dto: LoginDto): Promise<UserResponseDto> {
-    console.log(process.env.JWT_REFRESH_TOKEN)
     const user = await this.userService.findOneByEmail(dto.email);
     if (!user) {
       throw new UnauthorizedException();
