@@ -1,16 +1,18 @@
+// src/users/users.controller.ts
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Public } from '../decorator/public';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiBearerAuth('KEY_AUTH')
-  @ApiOperation({ summary: 'Valida o email e a senha para auteticar o usuario' })
+  @Public()
+  @ApiOperation({ summary: 'Valida o email e a senha para autenticar o usuario' })
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
@@ -43,5 +45,4 @@ export class UsersController {
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
   }
-
 }
