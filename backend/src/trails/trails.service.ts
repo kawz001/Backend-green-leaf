@@ -1,3 +1,4 @@
+// trails.service.ts
 import { Injectable } from '@nestjs/common';
 import { CreateTrailDto } from './dto/create-trail.dto';
 import { UpdateTrailDto } from './dto/update-trail.dto';
@@ -6,6 +7,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SearchTrailDto } from './dto/search-trail.dto';
 import { User } from 'src/users/entities/user.entity';
+import { LineString } from 'geojson';
 
 @Injectable()
 export class TrailsService {
@@ -26,7 +28,7 @@ export class TrailsService {
     const trail = this.repository.create({
       ...dto,
       createdBy: user,
-      path: dto.path ? JSON.stringify(dto.path) : null,
+      path: dto.path as LineString, // Directly assign the GeoJSON path
     });
 
     return this.repository.save(trail);
@@ -40,53 +42,49 @@ export class TrailsService {
 
     const updateData = {
       ...dto,
-      path: dto.path ? JSON.stringify(dto.path) : trail.path,
+      path: dto.path ? (dto.path as LineString) : trail.path, // Ensure path is assigned as GeoJSON
     };
 
     this.repository.merge(trail, updateData);
     return this.repository.save(trail);
   }
 
-
   async findAll(dto: SearchTrailDto) {
     const { name, page = 1, limit = 10 } = dto;
     const queryBuilder = this.repository.createQueryBuilder('trail')
-        .leftJoinAndSelect('trail.createdBy', 'user')
-        .addSelect("ST_AsGeoJSON(trail.path)", "trail_path");
+      .leftJoinAndSelect('trail.createdBy', 'user')
+      .addSelect("ST_AsGeoJSON(trail.path)", "path");
 
     if (name) {
-        queryBuilder.andWhere('trail.name LIKE :name', { name: `%${name}%` });
+      queryBuilder.andWhere('trail.name LIKE :name', { name: `%${name}%` });
     }
 
     queryBuilder.skip((page - 1) * limit).take(limit);
 
     const [data, count] = await queryBuilder.getManyAndCount();
 
-    // Parse `trail.path` only if it's a string
     const formattedData = data.map(trail => ({
-        ...trail,
-        path: typeof trail.path === 'string' ? JSON.parse(trail.path) : trail.path,
+      ...trail,
+      path: typeof trail.path === 'string' ? JSON.parse(trail.path) : trail.path,
     }));
 
     return { data: formattedData, count };
   }
 
   async findOne(id: number) {
-      const trail = await this.repository.createQueryBuilder('trail')
-          .where('trail.id = :id', { id })
-          .leftJoinAndSelect('trail.createdBy', 'user')
-          .addSelect("ST_AsGeoJSON(trail.path)", "path")
-          .getOne();
+    const trail = await this.repository.createQueryBuilder('trail')
+      .where('trail.id = :id', { id })
+      .leftJoinAndSelect('trail.createdBy', 'user')
+      .addSelect("ST_AsGeoJSON(trail.path)", "path")
+      .getOne();
 
-      return trail
-          ? {
-              ...trail,
-              path: typeof trail.path === 'string' ? JSON.parse(trail.path) : trail.path,
-          }
-          : null;
+    return trail
+      ? {
+          ...trail,
+          path: typeof trail.path === 'string' ? JSON.parse(trail.path) : trail.path,
+        }
+      : null;
   }
-
-
 
   async remove(id: number) {
     const trail = await this.repository.findOneBy({ id });

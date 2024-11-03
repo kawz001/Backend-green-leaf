@@ -2,6 +2,7 @@
 import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import Difficulty from './enum/difficulty';
 import { User } from 'src/users/entities/user.entity';
+import { LineString } from 'geojson';
 
 @Entity('trails')
 export class Trail {
@@ -35,7 +36,7 @@ export class Trail {
     srid: 4326,
     nullable: true,
   })
-  path: string;
+  path: LineString;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'createdById' })
