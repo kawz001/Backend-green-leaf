@@ -11,23 +11,30 @@ export class TrailCommentsService {
     private readonly repository: Repository<TrailComment>,
   ) {}
 
-  create(dto: CreateTrailCommentDto) {
-    const comment = this.repository.create(dto);
+  async create(dto: CreateTrailCommentDto) {
+    // Criar a instância de comentário vinculando as relações
+    const comment = this.repository.create({
+      comment: dto.comment,
+      trail: { id: dto.trail_id },
+      user: { id: dto.user_id },
+    });
+
+    // Salvar o comentário
     return this.repository.save(comment);
   }
 
   findAll() {
     return this.repository.find({
-      relations: ['trail', 'user'], // Inclui as relações para carregar os dados de `trail` e `user`
-      order: { createdAt: 'DESC' }, // Ordena do mais recente para o mais antigo
+      relations: ['trail', 'user'],
+      order: { createdAt: 'DESC' },
     });
   }
 
   findByTrailId(trailId: number) {
     return this.repository.find({
-      where: { trail: { id: trailId } }, // Busca pelos comentários de uma trilha específica
-      relations: ['trail', 'user'], // Inclui as relações `trail` e `user`
-      order: { createdAt: 'DESC' }, // Ordena do mais recente para o mais antigo
+      where: { trail: { id: trailId } },
+      relations: ['trail', 'user'],
+      order: { createdAt: 'DESC' },
     });
   }
 }
